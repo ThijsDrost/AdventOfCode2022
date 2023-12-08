@@ -14,7 +14,18 @@ with open(loc, 'r') as file:
         valves[name] = (flow_rate, leading)
         if flow_rate != 0:
             num_nonzero += 1
-print(valves)
+
+to_remove = []
+for key, value in valves.items():
+    if len(value[1]) == 2 and value[0] == 0:
+        valves[value[1][0]][1].remove(key)
+        valves[value[1][0]][1].append(value[1][1])
+        valves[value[1][1]][1].remove(key)
+        valves[value[1][1]][1].append(value[1][0])
+        to_remove.append(key)
+for key in to_remove:
+    valves.pop(key)
+print(len(valves), valves)
 
 
 def step(time_left, f_rate, released, num_notzero, curr_valve, path, valves_dict):
